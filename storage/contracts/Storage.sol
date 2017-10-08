@@ -1,32 +1,22 @@
 pragma solidity ^0.4.15;
 
 contract Storage {
-  mapping (uint => bytes32) public users;
-  bytes32[] public allData;
+  mapping (uint => uint) public users;
+  uint[] public allData;
 
-  event SetUserData(uint userId, bytes32 data);
+  event SetUserData(uint userId, uint data);
+  event GetUserData(uint userId, uint data);
 
-  function setUserData(uint userId, bytes32 data) public {
-    if (users[userId] != bytes32(0)) return;
+  function setUserData(uint userId, uint data) public {
+    require(users[userId] == 0);
     users[userId] = data;
-    allData.push(bytes32(userId));
+    allData.push(userId);
     SetUserData(userId, data);
   }
 
-  function getUserData(uint userId) constant returns (bytes32[] data) {
-    if (users[userId] != bytes32(0)) {
+  function getUserData(uint userId) public returns (uint[] data) {
+    if (users[userId] != 0) {
       allData.length = 0;
-      allData.push(users[userId]);
-      data = allData;
-      return data;
-    } else {
-      return data;
-    }
-  }
-
-  function getUserData2(uint userId) constant returns (bytes32[] data) {
-    if (users[userId] != bytes32(0)) {
-      // allData.length = 0;
       allData.push(users[userId]);
       return allData;
     } else {

@@ -6,13 +6,10 @@ contract('Storage', function(accounts) {
     storage = await Storage.deployed();
   });
   it("Set user data", async () => {
-    await storage.setUserData(1, "0x00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff");
-    const data = await storage.getUserData.call(1);
-    //assert.equal(data, "0x00112233445566778899aabbccddeeff00112233445566778899aabbccddeeff", "Can retrieve user data");
-    console.log(`${JSON.stringify(data, null, '  ')}`)
-    const data2 = await storage.getUserData2.call(1);
-    console.log(`${JSON.stringify(data2, null, '  ')}`)
+    await storage.setUserData(4321, 7890);
+    const data = await storage.getUserData.call(4321);
+    assert.equal(data[0], 7890, 'Return user data');
     const allData = await storage.allData.call(0);
-    console.log(`${JSON.stringify(allData, null, '  ')}`);
+    assert.equal(allData, 4321, 'Return userId');
   });
 });
