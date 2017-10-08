@@ -13,12 +13,22 @@ contract Storage {
     SetUserData(userId, data);
   }
 
-  function getUserData(uint userId) returns (bytes32 data) {
+  function getUserData(uint userId) constant returns (bytes32[] data) {
     if (users[userId] != bytes32(0)) {
-      //allData.length = 0;
-      //allData.push(users[userId]);
-      allData[0] = users[userId];
-      return allData[0];
+      allData.length = 0;
+      allData.push(users[userId]);
+      data = allData;
+      return data;
+    } else {
+      return data;
+    }
+  }
+
+  function getUserData2(uint userId) constant returns (bytes32[] data) {
+    if (users[userId] != bytes32(0)) {
+      // allData.length = 0;
+      allData.push(users[userId]);
+      return allData;
     } else {
       return data;
     }
