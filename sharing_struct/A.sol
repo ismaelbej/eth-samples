@@ -5,7 +5,7 @@ import "./GeometricShapes.sol";
 contract A is GeometricShapes {
     mapping (bytes32 => Point) public points;
 
-    function getPoint(bytes32 index) constant public returns (uint x, uint y) {
+    function getPoint(bytes32 index) view public returns (uint x, uint y) {
         return (points[index].x, points[index].y);
     }
 
