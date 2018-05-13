@@ -20,4 +20,27 @@ library ConvertLib{
         }
         return string(hexBytes);
     }
+
+    function fromHexDigit(byte digit) public pure returns (uint) {
+        if (byte('0') <= digit && digit <= byte('9')) {
+            return uint(digit) - uint(byte('0'));
+        }
+        if (byte('a') <= digit && digit <= byte('f')) {
+            return uint(digit) - uint(byte('a')) + 10;
+        }
+        if (byte('A') <= digit && digit <= byte('F')) {
+            return uint(digit) - uint(byte('A')) + 10;
+        }
+        revert('Invalid digit');
+    }
+
+    function fromHex(string value) public pure returns (bytes32) {
+        bytes memory hexBytes = bytes(value);
+        bytes32 result;
+        for (uint i=0; i<32; ++i) {
+            uint hexByte = fromHexDigit(hexBytes[2*i]) * 16 + fromHexDigit(hexBytes[2*i+1]);
+            result = result | bytes32(hexByte * 256**(31-i));
+        }
+        return result;
+    }
 }
