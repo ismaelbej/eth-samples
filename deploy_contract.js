@@ -34,7 +34,7 @@ async function deployQueryContract() {
   });
 
   console.log(`Deployed at: ${recipient.options.address}`);
-  // console.log(JSON.stringify(result, null, '  '));
+  console.log(`ABI: ${compiled.interface}`);
 
   await recipient.methods.deposit(4321)
   .send({
