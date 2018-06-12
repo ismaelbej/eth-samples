@@ -24,12 +24,18 @@ async function deployQueryContract() {
   const accounts = await web3.eth.personal.getAccounts();
 
   const Recipient = new web3.eth.Contract(JSON.parse(compiled.interface));
-  const recipient = await Recipient.deploy({
+
+  const toDeploy =  Recipient.deploy({
     data: `0x${compiled.bytecode}`
-  })
-  .send({
+  });
+
+  const gas = await toDeploy.estimateGas();
+
+  console.log(`Gas: ${gas}`);
+
+  const recipient = await toDeploy.send({
     from: accounts[0],
-    gas: 2000000,
+    gas: `0x${gas.toString(16)}`,
     gasPrice: '30000000000'
   });
 
