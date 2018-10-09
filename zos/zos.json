@@ -1,0 +1,7 @@
+{
+  "name": "FaucetToken",
+  "version": "0.1.0",
+  "contracts": {
+    "FaucetToken": "FaucetToken"
+  }
+}
