@@ -2,7 +2,7 @@ const solc = require('solc');
 
 function compileContract() {
   const recipientCode = `
-pragma solidity ^0.4.11;
+pragma solidity ^0.5.1;
 contract Recipient {
   uint public id;
   function deposit(uint _id) public payable {
@@ -10,11 +10,27 @@ contract Recipient {
   }
 }`;
 
-  const recipientResult = solc.compile(recipientCode, 1);
+  const compileParams = JSON.stringify({
+    language: 'Solidity',
+    sources: {
+      'Recipient.sol': {
+        content: recipientCode,
+      }
+    },
+    settings: {
+      outputSelection: {
+        '*': {
+          '*': ['abi', 'evm.bytecode'],
+        }
+      }
+    }
+  });
+  const recipientResult = JSON.parse(solc.compile(compileParams));
   //console.log(`${JSON.stringify(recipientResult, null, '  ')}`);
-  const recipientCompiled = recipientResult.contracts[':Recipient'];
-  console.log(`Bytecode: ${recipientCompiled.bytecode}`);
-  console.log(`Interface: ${recipientCompiled.interface}`);
+  console.log(recipientResult.contracts['Recipient.sol']);
+  const recipientCompiled = recipientResult.contracts['Recipient.sol'].Recipient;
+  console.log(`Bytecode: ${JSON.stringify(recipientCompiled.evm.bytecode.object, null, '  ')}`);
+  console.log(`Interface: ${JSON.stringify(recipientCompiled.abi, null, ' ')}`);
 }
 
 compileContract();

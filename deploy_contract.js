@@ -4,18 +4,40 @@ const solc = require('solc');
 const web3 = new Web3("http://localhost:8545");
 
 const recipientSource = `
-pragma solidity ^0.4.20;
+pragma solidity ^0.5.1;
 contract Recipient {
   uint public id;
+  constructor() public {}
   function deposit(uint _id) public payable {
     id = _id;
   }
 }`;
 
 function compileContract(source, name) {
-  const result = solc.compile(source, 1);
-  const compiled = result.contracts[`:${name}`];
-  return compiled;
+  const compileParams = JSON.stringify({
+    language: 'Solidity',
+    sources: {
+      'Contract.sol': {
+        content: source,
+      }
+    },
+    settings: {
+      outputSelection: {
+        '*': {
+          '*': ['abi', 'evm.bytecode'],
+        }
+      }
+    }
+  });
+
+  const compiled = solc.compile(compileParams);
+
+  const result = JSON.parse(compiled);
+  const contract = result.contracts['Contract.sol'][name];
+  return {
+    bytecode: contract.evm.bytecode.object,
+    interface: contract.abi,
+  };
 }
 
 async function deployQueryContract() {
@@ -23,11 +45,18 @@ async function deployQueryContract() {
 
   const accounts = await web3.eth.personal.getAccounts();
 
-  const Recipient = new web3.eth.Contract(JSON.parse(compiled.interface));
+  console.log(compiled.interface);
+
+  const Recipient = new web3.eth.Contract(compiled.interface);
+
+  console.log(`0x${compiled.bytecode}`);
 
   const toDeploy =  Recipient.deploy({
-    data: `0x${compiled.bytecode}`
+    data: `0x${compiled.bytecode}`,
+    arguments: [],
   });
+
+  console.log('.............');
 
   const gas = await toDeploy.estimateGas();
 
@@ -35,9 +64,10 @@ async function deployQueryContract() {
 
   const recipient = await toDeploy.send({
     from: accounts[0],
-    gas: `0x${gas.toString(16)}`,
+    gas: '0x200000', // web3.utils.toHex(gas),
     gasPrice: '30000000000'
-  });
+  })
+  .on('receipt', receipt => console.log(receipt));
 
   console.log(`Deployed at: ${recipient.options.address}`);
   console.log(`ABI: ${compiled.interface}`);
