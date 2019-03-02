@@ -45,32 +45,28 @@ async function deployQueryContract() {
 
   const accounts = await web3.eth.personal.getAccounts();
 
-  console.log(compiled.interface);
-
   const Recipient = new web3.eth.Contract(compiled.interface);
-
-  console.log(`0x${compiled.bytecode}`);
 
   const toDeploy =  Recipient.deploy({
     data: `0x${compiled.bytecode}`,
     arguments: [],
   });
 
-  console.log('.............');
-
   const gas = await toDeploy.estimateGas();
 
   console.log(`Gas: ${gas}`);
 
+  let receipt;
   const recipient = await toDeploy.send({
     from: accounts[0],
-    gas: '0x200000', // web3.utils.toHex(gas),
-    gasPrice: '30000000000'
+    gas: web3.utils.toHex(gas),
+    gasPrice: web3.utils.toHex('30000000000')
   })
-  .on('receipt', receipt => console.log(receipt));
+  .on('receipt', r => receipt = r);
 
   console.log(`Deployed at: ${recipient.options.address}`);
-  console.log(`ABI: ${compiled.interface}`);
+  console.log(`ABI: ${JSON.stringify(compiled.interface)}`);
+  console.log(`Gas used: ${web3.utils.toBN(receipt.gasUsed).toString()}`);
 
   await recipient.methods.deposit(4321)
   .send({
