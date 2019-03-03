@@ -36,4 +36,4 @@ async function sendMultipleTransactions() {
   console.log(`Last nonce: ${(await eth.getTransaction(arr[499])).nonce}`);
 }
 
-sendMultipleTransactions();
+// sendMultipleTransactions();

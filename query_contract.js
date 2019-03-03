@@ -13,4 +13,4 @@ async function queryContract() {
   console.log(`Result: ${id.toString(16)}`);
 }
 
-queryContract();
+// queryContract();

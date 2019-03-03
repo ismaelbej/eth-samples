@@ -18,4 +18,4 @@ function parseTxParams() {
   console.log(`Encoded: ${encoded.toString('hex')}`);
 }
 
-parseTxParams();
+// parseTxParams();

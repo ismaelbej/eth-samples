@@ -78,4 +78,4 @@ async function deployQueryContract() {
   console.log(`Result: ${result}`);
 }
 
-deployQueryContract();
+// deployQueryContract();

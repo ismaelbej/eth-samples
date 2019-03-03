@@ -32,5 +32,5 @@ async function listenBalanceChanges() {
   });
 };
 
-listenBalanceChanges();
+// listenBalanceChanges();
 

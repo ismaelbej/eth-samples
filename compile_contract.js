@@ -33,4 +33,4 @@ contract Recipient {
   console.log(`Interface: ${JSON.stringify(recipientCompiled.abi, null, ' ')}`);
 }
 
-compileContract();
+// compileContract();
