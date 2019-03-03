@@ -1,7 +1,6 @@
-const Web3 = require('web3');
+const test = require('tape');
 const solc = require('solc');
-
-const web3 = new Web3("http://localhost:8545");
+const utils = require('./utils');
 
 const recipientSource = `
 pragma solidity ^0.5.1;
@@ -40,10 +39,12 @@ function compileContract(source, name) {
   };
 }
 
-async function deployQueryContract() {
+test('Compile, deploy and query contract', async (t) => {
+  const { web3, accounts } = await utils.initChain();
+
   const compiled = compileContract(recipientSource, 'Recipient');
 
-  const accounts = await web3.eth.personal.getAccounts();
+  t.ok(compiled, 'Contract compiled');
 
   const Recipient = new web3.eth.Contract(compiled.interface);
 
@@ -53,6 +54,8 @@ async function deployQueryContract() {
   });
 
   const gas = await toDeploy.estimateGas();
+
+  t.ok(gas, 'Gas calculated');
 
   console.log(`Gas: ${gas}`);
 
@@ -64,18 +67,24 @@ async function deployQueryContract() {
   })
   .on('receipt', r => receipt = r);
 
+  t.ok(recipient && receipt.status, 'Contract deployed');
+
   console.log(`Deployed at: ${recipient.options.address}`);
   console.log(`ABI: ${JSON.stringify(compiled.interface)}`);
   console.log(`Gas used: ${web3.utils.toBN(receipt.gasUsed).toString()}`);
 
-  await recipient.methods.deposit(4321)
+  receipt = await recipient.methods.deposit(4321)
   .send({
     from: accounts[0],
     value: 1000
   });
 
-  const result = await recipient.methods.id().call();
-  console.log(`Result: ${result}`);
-}
+  t.ok(receipt.status, 'Execute method');
 
-// deployQueryContract();
+  const result = await recipient.methods.id().call();
+
+  t.ok(result, 'Query contract');
+  console.log(`Result: ${result}`);
+
+  t.end();
+});
