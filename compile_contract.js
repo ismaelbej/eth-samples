@@ -1,20 +1,12 @@
+const test = require('tape');
 const solc = require('solc');
 
-function compileContract() {
-  const recipientCode = `
-pragma solidity ^0.5.1;
-contract Recipient {
-  uint public id;
-  function deposit(uint _id) public payable {
-    id = _id;
-  }
-}`;
-
-  const compileParams = JSON.stringify({
+function compileContract(source) {
+  const compileInput = JSON.stringify({
     language: 'Solidity',
     sources: {
-      'Recipient.sol': {
-        content: recipientCode,
+      'Source.sol': {
+        content: source,
       }
     },
     settings: {
@@ -25,12 +17,29 @@ contract Recipient {
       }
     }
   });
-  const recipientResult = JSON.parse(solc.compile(compileParams));
-  //console.log(`${JSON.stringify(recipientResult, null, '  ')}`);
-  console.log(recipientResult.contracts['Recipient.sol']);
-  const recipientCompiled = recipientResult.contracts['Recipient.sol'].Recipient;
-  console.log(`Bytecode: ${JSON.stringify(recipientCompiled.evm.bytecode.object, null, '  ')}`);
-  console.log(`Interface: ${JSON.stringify(recipientCompiled.abi, null, ' ')}`);
+  const result = JSON.parse(solc.compile(compileInput));
+  return {
+    contract: result.contracts['Source.sol']
+  };
 }
 
-// compileContract();
+test('Compile contract', async (t) => {
+  const recipientSource = `
+pragma solidity ^0.5.1;
+contract Recipient {
+  uint public id;
+  function deposit(uint _id) public payable {
+    id = _id;
+  }
+}`;
+
+  const recipientResult = compileContract(recipientSource);
+  // console.log(recipientResult.contracts['Recipient.sol']);
+  t.ok(recipientResult.contract, "Compilation ok");
+  t.ok(recipientResult.contract.Recipient, "Contract compiled");
+  const recipientCompiled = recipientResult.contract.Recipient;
+  console.log(`Bytecode: ${JSON.stringify(recipientCompiled.evm.bytecode.object, null, '  ')}`);
+  console.log(`Interface: ${JSON.stringify(recipientCompiled.abi)}`);
+
+  t.end();
+});
