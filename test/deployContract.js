@@ -1,55 +1,24 @@
 const test = require('tape');
-const solc = require('solc');
+const fs = require('fs');
+const path = require('path');
 const utils = require('../utils/blockchain');
+const { compileContract }= require('../src/compileContract');
 
-const recipientSource = `
-pragma solidity ^0.5.1;
-contract Recipient {
-  uint public id;
-  constructor() public {}
-  function deposit(uint _id) public payable {
-    id = _id;
-  }
-}`;
-
-function compileContract(source, name) {
-  const compileParams = JSON.stringify({
-    language: 'Solidity',
-    sources: {
-      'Contract.sol': {
-        content: source,
-      }
-    },
-    settings: {
-      outputSelection: {
-        '*': {
-          '*': ['abi', 'evm.bytecode'],
-        }
-      }
-    }
-  });
-
-  const compiled = solc.compile(compileParams);
-
-  const result = JSON.parse(compiled);
-  const contract = result.contracts['Contract.sol'][name];
-  return {
-    bytecode: contract.evm.bytecode.object,
-    interface: contract.abi,
-  };
-}
 
 test('Compile, deploy and query contract', async (t) => {
+
   const { web3, accounts } = await utils.initChain();
 
-  const compiled = compileContract(recipientSource, 'Recipient');
+  const recipientSource = fs.readFileSync(path.join(__dirname, '..', 'contracts', 'Recipient.sol'), 'utf8');
+
+  const compiled = compileContract(recipientSource);
 
   t.ok(compiled, 'Contract compiled');
 
-  const Recipient = new web3.eth.Contract(compiled.interface);
+  const Recipient = new web3.eth.Contract(compiled.contract.Recipient.abi);
 
   const toDeploy =  Recipient.deploy({
-    data: `0x${compiled.bytecode}`,
+    data: `0x${compiled.contract.Recipient.evm.bytecode.object}`,
     arguments: [],
   });
 
