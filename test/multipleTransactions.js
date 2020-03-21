@@ -3,7 +3,7 @@ const utils = require('../utils/blockchain');
 
 const NUM_TRANSACTIONS = 500;
 
-test('Send many transactions', async (t) => {
+test.skip('Send many transactions', async (t) => {
   const { web3, accounts } = await utils.initChain();
 
   const account0 = accounts[0];
