@@ -38,8 +38,8 @@ contract Recipient {
   t.ok(recipientResult.contract, "Compilation ok");
   t.ok(recipientResult.contract.Recipient, "Contract compiled");
   const recipientCompiled = recipientResult.contract.Recipient;
-  console.log(`Bytecode: ${JSON.stringify(recipientCompiled.evm.bytecode.object, null, '  ')}`);
-  console.log(`Interface: ${JSON.stringify(recipientCompiled.abi)}`);
+  //console.log(`Bytecode: ${JSON.stringify(recipientCompiled.evm.bytecode.object, null, '  ')}`);
+  //console.log(`Interface: ${JSON.stringify(recipientCompiled.abi)}`);
 
   t.end();
 });

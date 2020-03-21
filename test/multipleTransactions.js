@@ -1,5 +1,5 @@
 const test = require('tape');
-const utils = require('./utils');
+const utils = require('../utils/blockchain');
 
 const NUM_TRANSACTIONS = 500;
 
@@ -11,8 +11,8 @@ test('Send many transactions', async (t) => {
 
   const start = await web3.eth.getTransactionCount(account0);
 
-  console.log(`Account: ${account0}`);
-  console.log(`Start: ${start}`);
+  //console.log(`Account: ${account0}`);
+  //console.log(`Start: ${start}`);
 
   const arr = [];
   for (let i=0; i<NUM_TRANSACTIONS; ++i) {
@@ -33,8 +33,8 @@ test('Send many transactions', async (t) => {
   const first = (await web3.eth.getTransaction(arr[0])).nonce;
   const last = (await web3.eth.getTransaction(arr[arr.length-1])).nonce;
 
-  console.log(`First nonce: ${first}`);
-  console.log(`Last nonce: ${last}`);
+  //console.log(`First nonce: ${first}`);
+  //console.log(`Last nonce: ${last}`);
 
   t.equal(first, start, 'First nonce should match');
   t.equal(last, start + NUM_TRANSACTIONS - 1, 'Last nonce should match');

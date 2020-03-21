@@ -1,6 +1,6 @@
 const test = require('tape');
 const solc = require('solc');
-const utils = require('./utils');
+const utils = require('../utils/blockchain');
 
 const recipientSource = `
 pragma solidity ^0.5.1;
@@ -57,7 +57,7 @@ test('Compile, deploy and query contract', async (t) => {
 
   t.ok(gas, 'Gas calculated');
 
-  console.log(`Gas: ${gas}`);
+  //console.log(`Gas: ${gas}`);
 
   let receipt;
   const recipient = await toDeploy.send({
@@ -69,9 +69,9 @@ test('Compile, deploy and query contract', async (t) => {
 
   t.ok(recipient && receipt.status, 'Contract deployed');
 
-  console.log(`Deployed at: ${recipient.options.address}`);
-  console.log(`ABI: ${JSON.stringify(compiled.interface)}`);
-  console.log(`Gas used: ${web3.utils.toBN(receipt.gasUsed).toString()}`);
+  //console.log(`Deployed at: ${recipient.options.address}`);
+  //console.log(`ABI: ${JSON.stringify(compiled.interface)}`);
+  //console.log(`Gas used: ${web3.utils.toBN(receipt.gasUsed).toString()}`);
 
   receipt = await recipient.methods.deposit(4321)
   .send({
@@ -84,7 +84,7 @@ test('Compile, deploy and query contract', async (t) => {
   const result = await recipient.methods.id().call();
 
   t.ok(result, 'Query contract');
-  console.log(`Result: ${result}`);
+  //console.log(`Result: ${result}`);
 
   t.end();
 });

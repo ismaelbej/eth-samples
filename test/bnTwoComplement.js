@@ -11,8 +11,8 @@ test('Uint two\'s complement', async (t) => {
   t.equal(c.toString(16, 64), '0000000000000000000000000000000000000000000000000000000000000001', 'Positive two\'s complement');
   t.equal(d.toString(16, 64), 'ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff', 'Negative two\'s complement');
 
-  console.log(`A: ${c.toString(16, 64)}`);
-  console.log(`B: ${d.toString(16, 64)}`);
+  //console.log(`A: ${c.toString(16, 64)}`);
+  //console.log(`B: ${d.toString(16, 64)}`);
 
   t.end();
 });

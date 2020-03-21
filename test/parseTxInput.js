@@ -13,7 +13,7 @@ test('Parse tx input data', async (t) => {
   t.equal(decoded[1].toString(16), '15af1d78b58c40000', 'Uint256 parameter');
   t.equal(decoded[2].length, 0, 'Bytes array is empty');
 
-  console.log(`Decoded: ${JSON.stringify(decoded, null, '  ')}`);
+  //console.log(`Decoded: ${JSON.stringify(decoded, null, '  ')}`);
 
   const params = [
     '0xb56d622ddf60ec532b5f43b4ff9b0e7b1ff92db3',
@@ -26,7 +26,7 @@ test('Parse tx input data', async (t) => {
   t.ok(encoded, 'Encoded parameters');
   t.equal(encoded.length, 128, 'Encoded is 128 bytes');
 
-  console.log(`Encoded: ${encoded.toString('hex')}`);
+  //console.log(`Encoded: ${encoded.toString('hex')}`);
 
   t.end();
 });

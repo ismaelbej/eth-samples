@@ -1,5 +1,5 @@
 const test = require('tape');
-const Transaction = require('ethereumjs-tx');
+const Transaction = require('ethereumjs-tx').Transaction;
 
 test('Sign transaction', async (t) => {
 
@@ -25,7 +25,7 @@ test('Sign transaction', async (t) => {
 
   const serializedTx = tx.serialize();
 
-  console.log(`Tx: ${serializedTx.toString('hex')}`);
+  //console.log(`Tx: ${serializedTx.toString('hex')}`);
 
   const decodedTx = new Transaction(serializedTx);
 
