@@ -21,9 +21,9 @@ test('Events', async (t) => {
 
     t.ok(receipt.events.logTest, "Event fired")
 
-    t.ok(receipt.events.logTest.returnValues.id, "4321", "First parameter");
-    t.ok(receipt.events.logTest.returnValues.from, accounts[0], "Second parameter");
-    t.ok(receipt.events.logTest.returnValues.value, "2222", "Third parameter");
+    t.equal(receipt.events.logTest.returnValues.id, "4321", "First parameter");
+    t.equal(receipt.events.logTest.returnValues.from, accounts[0], "Second parameter");
+    t.equal(receipt.events.logTest.returnValues.value, "2222", "Third parameter");
 
     const result = await events.getPastEvents('allEvents');
 
