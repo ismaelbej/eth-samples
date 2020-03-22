@@ -9,16 +9,16 @@ test('Compile, deploy and query contract', async (t) => {
 
   const { web3, accounts } = await utils.initChain();
 
-  const recipientSource = fs.readFileSync(path.join(__dirname, '..', 'contracts', 'Recipient.sol'), 'utf8');
+  const source = fs.readFileSync(path.join(__dirname, '..', 'contracts', 'Recipient.sol'), 'utf8');
 
-  const compiled = compileContract(recipientSource);
+  const compiled = compileContract(source);
 
   t.ok(compiled, 'Contract compiled');
 
-  const Recipient = new web3.eth.Contract(compiled.contract.Recipient.abi);
+  const Recipient = new web3.eth.Contract(compiled.Recipient.abi);
 
   const toDeploy =  Recipient.deploy({
-    data: `0x${compiled.contract.Recipient.evm.bytecode.object}`,
+    data: `0x${compiled.Recipient.bytecode}`,
     arguments: [],
   });
 

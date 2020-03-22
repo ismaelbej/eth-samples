@@ -10,6 +10,9 @@ async function initChain(options = {}) {
     provider,
     web3,
     accounts,
+    deployContract: (abi, bytecode, arguments, options) => {
+      return deployContract(web3, abi, bytecode, arguments, options);
+    }
   };
 }
 

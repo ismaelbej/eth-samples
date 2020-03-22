@@ -11,7 +11,7 @@ test("Hexadecimal conversion", async (t) => {
 
   const compiled = compileContract(source);
 
-  const hexadecimal = await deployContract(web3, compiled.contract.Hexadecimal.abi, compiled.contract.Hexadecimal.evm.bytecode.object, { from: accounts[0] });
+  const hexadecimal = await deployContract(web3, compiled.Hexadecimal.abi, compiled.Hexadecimal.bytecode, { from: accounts[0] });
 
   const input = '393ebb634e9a8913f72442cc158dcd1d0d27aa86ba34f1a5c5513a7562f8dbe5';
 
