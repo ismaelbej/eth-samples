@@ -1,6 +1,23 @@
-pragma solidity ^0.4.15;
+pragma solidity ^0.5.0;
 
-import "./GeometricShapes.sol";
+contract GeometricShapes {
+    struct Point {
+        uint x;
+        uint y;
+    }
+}
+
+contract A is GeometricShapes {
+    mapping (bytes32 => Point) public points;
+
+    function getPoint(bytes32 index) view public returns (uint x, uint y) {
+        return (points[index].x, points[index].y);
+    }
+
+    function setPoint(bytes32 index, uint x, uint y) public {
+        points[index] = Point(x, y);
+    }
+}
 
 contract B is GeometricShapes {
     Point[2] public rectangle;
