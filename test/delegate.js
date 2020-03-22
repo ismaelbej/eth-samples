@@ -5,15 +5,15 @@ const { initChain, deployContract } = require('../utils/blockchain');
 const { compileContract }= require('../src/compileContract');
 
 
-test('Events', async (t) => {
+test('Delegatecall opcode', async (t) => {
   const source = fs.readFileSync(path.join(__dirname, '..', 'contracts', 'Delegate.sol'), 'utf8');
 
   const { web3, accounts } = await initChain();
 
   const compiled = compileContract(source);
 
-  const a = await deployContract(web3, compiled.contract.A.abi, compiled.contract.A.evm.bytecode.object,{ from: accounts[0] });
-  console.log(a.options.address);
+  const a = await deployContract(web3, compiled.contract.A.abi, compiled.contract.A.evm.bytecode.object, { from: accounts[0] });
+  //console.log(a.options.address);
 
   const b = await deployContract(web3, compiled.contract.B.abi, compiled.contract.B.evm.bytecode.object, { from: accounts[0] });
   //console.log(b.options.address);
