@@ -1,7 +1,7 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.7.0;
 
 
-contract Base {
+abstract contract Base {
     address public called;
     address public sender;
     uint public value;
